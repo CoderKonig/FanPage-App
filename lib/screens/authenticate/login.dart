@@ -1,4 +1,8 @@
+import 'dart:js';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fanpage/home.dart';
+import 'package:fanpage/screens/verification.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +15,9 @@ class LoginPage extends StatelessWidget{
 
   var _email = TextEditingController();
   var _password = TextEditingController();
+  String email = "";
+  String password = "";
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -46,11 +53,18 @@ class LoginPage extends StatelessWidget{
                 color: Colors.pink[400],
                 child: Text('Sign In'),
                 onPressed: () async {
-                  
+                  email = _email.text;
+                  password = _password.text;
 
-                FirebaseAuth auth = FirebaseAuth.instance;
+                  _email.clear();
+                  _password.clear();
 
-                User? user;
+                  login();
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+
+                  // FirebaseFirestore.instance
+                  //   .collection('Users')
+                  //   .add({'text': 'data added through app'});
 
                 }
               )
@@ -59,5 +73,24 @@ class LoginPage extends StatelessWidget{
         ),
       ),
     );
+  }
+  Future<void> login() async{
+    try {
+      UserCredential _ = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      }on FirebaseAuthException catch (e) {
+      
+      if (e.code == 'user-not-found') {
+        
+            content: Text('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+            content: Text('Wrong password provided for that user.');
+      } else {
+      
+      }
+    }catch(e){
+      print(e.toString());
+    }
+
   }
 }

@@ -29,9 +29,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Splash Screen',
+      title: 'FanPage',
       // home: Wrapper(),
-      home: SignUp(),
+      home: Splash(title: "Splash Screen",),
 
     );
   }

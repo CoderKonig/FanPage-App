@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({ Key? key }) : super(key: key);
+  
 
   // @override
   // RegisterPage createState() => RegisterPage();
@@ -66,7 +67,7 @@ class RegisterPage extends StatelessWidget {
               TextFormField(
                 controller: _password,
                 decoration: const InputDecoration(
-                  labelText: 'Enter Password'
+                  labelText: 'Enter a 6 Character Password'
                 ),
                 onChanged: (val){
 
@@ -97,18 +98,18 @@ class RegisterPage extends StatelessWidget {
                 color: Colors.pink[100],
                 child: Text('Register'),
                 onPressed: () async {
-                  // if (_formKey.currentState!.validate()) {
-                  //   ScaffoldMessenger.of(context).showSnackBar(
-                  //       const SnackBar(content: Text('Processing Data')));
-
-                  //   setState(() {
-                  //     register();
+                  // FirebaseFirestore.instance
+                  //   .collection('Users')
+                  //   .add({'displayname': _displayname.text,
+                  //   'email': _email.text,
+                  //   'password': _password.text,
+                  //   'first_name': f_name.text,
+                  //   'last_name': l_name.text
                   //   });
-                  // }
+                  register();
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                  
                 },
-
-
-                
               )
             ]
           ),
@@ -117,68 +118,32 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-// Future<void> register() async {
-//     try {
-//       UserCredential userCredential =
-//           await _auth.createUserWithEmailAndPassword(
-//               email: _email.text, password: _password.text);
-//       _db
-//           .collection("users")
-//           .doc(userCredential.user!.uid)
-//           .set({
-//             "first_name": f_name.text,
-//             "last_name": l_name.text,
-//             "display name": _displayname,
+ Future<void> register() async {
+    try {
+      UserCredential userCredential =
+        await _auth.createUserWithEmailAndPassword(
+               email: _email.text, password: _password.text);
+       _db
+           .collection("Users")
+           .doc(userCredential.user!.uid)
+           .set({
+             'displayname': _displayname.text,
+             
+              'email': _email.text,
+              'first_name': f_name.text,
+              'last_name': l_name.text,
+              'registerDateTime':  DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()),
             
-//             "Role": "Customer",
-//           })
-//           .then((value) => (null))
-//           .onError((error, stackTrace) => (null));
-//       // ignore: unused_catch_clause
-//     } on FirebaseAuthException catch (e) {
-//       ScaffoldMessenger.of(context)
-//           .showSnackBar(SnackBar(content: Text(e.code.toString())));
-//     } catch (e) {
-//       // ignore: avoid_print
-//       print(e);
-//     }
+              'UserRole': "Customer"
 
-//     setState(() {});
-//     ScaffoldMessenger.of(context)
-//         .showSnackBar(const SnackBar(content: Text("Registration Completed")));
-//     Navigator.of(context).pushReplacement(
-//         MaterialPageRoute(builder: (BuildContext context) => const Home()));
-//   }
+           });
+     } catch (e) {
 
-//   void _register (BuildContext context) async{
-//     try{
-//       await  _auth.createUserWithEmailAndPassword(email: _email.text, password: _password.text);
-    
-//       ScaffoldMessenger.of(context).clearSnackBars();
-//     } on FirebaseException catch(e){
-//       if(e.code == 'email-already-in-use'){
-//         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text("A user with that email exists.")));
-//         print('No user found for that email.');
-//       } else if (e.code == 'weak password'){
-//         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Password too insecure")));
-//         print('Wrong Password');
-//       }
-//       return;
-//     }
-    
-//     try{
-//       await _db.collection("users").doc(_auth.currentUser!.uid).set({
-//         "display_name" : _displayname.text,
-//         "email" : _email.text,
-//         "role" : "USER"
-//       });
-//     } on FirebaseException catch(e) {
-//       ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(e.message ?? "Unknown Error")));
+       print(e);
+       return;
+     }
+     
+    //  Navigator.of(context).pushReplacement(
+    //     MaterialPageRoute(builder: (BuildContext context) => const HomePage()));
 
-//     }
-
-// }
-}
-
-
-
+ }}

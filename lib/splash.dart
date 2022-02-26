@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:fanpage/post_splash.dart';
 import 'package:fanpage/screens/authenticate/signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class _Splash extends State<Splash> {
     Timer(
         const Duration(seconds: 15),
         () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => SignUp())));
+            builder: (BuildContext context) => postSplash())));
   }
 
   @override
